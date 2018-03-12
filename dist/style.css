@@ -305,14 +305,50 @@
   text-align: center;
   font-size: 12px;
   font-weight: 300;
-  height: 20px;
+  width: auto;
+  white-space: inherit;
   line-height: 20px;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   background-color: #42b983;
   color: #fff;
-  border-radius: 4px 4px 0 0;
+  display: flex;
+}
+
+.orgchart .node .title .title-image {
+  height: 60px;
+  border-radius: 50%;
+  margin: 4px;
+}
+
+.orgchart .node .title .title-text {
+  align-self: center;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 300;
+  margin: 4px;
+  height: 100%;
+  width: auto;
+  white-space: inherit;
+  line-height: 20px;
+  overflow: hidden;
+  color: #fff;
+  border-radius: 4px 4px 0 0
+}
+
+.success-chart .title {
+  background-color: #2bbb94 !important;
+}
+
+.canceled-chart .title {
+  background-color: #bf3456 !important;
+}
+
+.waiting-chart .title {
+  background-color: #838891 !important;
+}
+
+.unnecessary-chart .title {
+  background-color: #40a9b7 !important;
 }
 
 .orgchart.b2t .node .title {

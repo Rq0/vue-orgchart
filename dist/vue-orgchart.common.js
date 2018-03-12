@@ -337,6 +337,7 @@ var OrgChart$1 = function () {
             reject(new Error(this.statusText));
           }
         }
+
         xhr.open('GET', url);
         xhr.onreadystatechange = handler;
         xhr.responseType = 'json';
@@ -407,6 +408,7 @@ var OrgChart$1 = function () {
         node.style.offsetWidth = node.offsetWidth;
       }
     }
+
     // whether the cursor is hovering over the node
 
   }, {
@@ -414,6 +416,7 @@ var OrgChart$1 = function () {
     value: function _isInAction(node) {
       return node.querySelector(':scope > .edge').className.indexOf('fa-') > -1;
     }
+
     // detect the exist/display state of related node
 
   }, {
@@ -460,6 +463,7 @@ var OrgChart$1 = function () {
 
       return state;
     }
+
     // find the related nodes
 
   }, {
@@ -559,6 +563,7 @@ var OrgChart$1 = function () {
         });
       }
     }
+
     // define node click event handler
 
   }, {
@@ -572,6 +577,7 @@ var OrgChart$1 = function () {
       }
       clickedNode.classList.add('focused');
     }
+
     // build the parent node of specific node
 
   }, {
@@ -617,6 +623,7 @@ var OrgChart$1 = function () {
       arrow.classList.toggle('fa-chevron-up');
       arrow.classList.toggle('fa-chevron-down');
     }
+
     // show the parent node of the specified node
 
   }, {
@@ -643,6 +650,7 @@ var OrgChart$1 = function () {
       parent.classList.add('slide');
       parent.classList.remove('slide-down');
     }
+
     // show the sibling nodes of the specified node
 
   }, {
@@ -707,6 +715,7 @@ var OrgChart$1 = function () {
         }
       }, this);
     }
+
     // hide the sibling nodes of the specified node
 
   }, {
@@ -835,6 +844,7 @@ var OrgChart$1 = function () {
         }
       }, this);
     }
+
     // recursively hide the ancestor node and sibling nodes of the specified node
 
   }, {
@@ -872,6 +882,7 @@ var OrgChart$1 = function () {
         this.hideParent(parent);
       }
     }
+
     // exposed method
 
   }, {
@@ -889,6 +900,7 @@ var OrgChart$1 = function () {
         that.showParent(currentRoot);
       });
     }
+
     // start up loading status for requesting new nodes
 
   }, {
@@ -916,6 +928,7 @@ var OrgChart$1 = function () {
       }
       return true;
     }
+
     // terminate loading status for requesting new nodes
 
   }, {
@@ -933,6 +946,7 @@ var OrgChart$1 = function () {
         exportBtn.disabled = false;
       }
     }
+
     // define click event handler for the top edge
 
   }, {
@@ -988,6 +1002,7 @@ var OrgChart$1 = function () {
         }
       }
     }
+
     // recursively hide the descendant nodes of the specified node
 
   }, {
@@ -1033,6 +1048,7 @@ var OrgChart$1 = function () {
       }, this);
       this._addClass(descendants, 'slide slide-up');
     }
+
     // show the children nodes of the specified node
 
   }, {
@@ -1071,6 +1087,7 @@ var OrgChart$1 = function () {
       this._addClass(descendants, 'slide');
       this._removeClass(descendants, 'slide-up');
     }
+
     // build the child nodes of specific node
 
   }, {
@@ -1081,6 +1098,7 @@ var OrgChart$1 = function () {
       appendTo.querySelector('td').setAttribute('colSpan', data.length * 2);
       this.buildHierarchy(appendTo, { 'children': data }, 0, callback);
     }
+
     // exposed method
 
   }, {
@@ -1112,6 +1130,7 @@ var OrgChart$1 = function () {
         }
       });
     }
+
     // bind click event handler for the bottom edge
 
   }, {
@@ -1162,6 +1181,7 @@ var OrgChart$1 = function () {
         }
       }
     }
+
     // subsequent processing of build sibling nodes
 
   }, {
@@ -1183,6 +1203,7 @@ var OrgChart$1 = function () {
         temp[2].insertBefore(leftLine, temp[2].children[1]);
       }
     }
+
     // build the sibling nodes of specific node
 
   }, {
@@ -1323,6 +1344,7 @@ var OrgChart$1 = function () {
         });
       }
     }
+
     // bind click event handler for the left and right edges
 
   }, {
@@ -1398,6 +1420,7 @@ var OrgChart$1 = function () {
         }
       }
     }
+
     // event handler for toggle buttons in Hybrid(horizontal + vertical) OrgChart
 
   }, {
@@ -1676,14 +1699,17 @@ var OrgChart$1 = function () {
           return tr.remove();
         });
       }
-      var customE = new CustomEvent('nodedropped.orgchart', { 'detail': {
+      var customE = new CustomEvent('nodedropped.orgchart', {
+        'detail': {
           'draggedNode': dragged,
           'dragZone': dragZone.children[0],
           'dropZone': dropZone
-        } });
+        }
+      });
 
       chart.dispatchEvent(customE);
     }
+
     // create node
 
   }, {
@@ -1743,7 +1769,7 @@ var OrgChart$1 = function () {
         if (nodeData.parentId) {
           nodeDiv.setAttribute('data-parent', nodeData.parentId);
         }
-        nodeDiv.innerHTML = '\n        <div class="title">' + nodeData[opts.nodeTitle] + '</div>\n        ' + (opts.nodeContent ? '<div class="content">' + nodeData[opts.nodeContent] + '</div>' : '') + '\n      ';
+        nodeDiv.innerHTML = '\n        <div class="title">\n          ' + (opts.avatarUrl ? '<img \n            class="title-image" \n            src=' + (nodeData[opts.avatarUrl] || opts.defaultAvatarUrl) + ' \n            alt="">' : '') + '\n          <div class="title-text">' + nodeData[opts.nodeTitle] + '</div>\n        </div>\n        ' + (opts.nodeContent ? '<div class="content">' + (nodeData[opts.nodeContent] || 'Должность не указана') + '</div>' : '') + '\n      ';
         // append 4 direction arrows or expand/collapse buttons
         var flags = nodeData.relationship || '';
 
@@ -4407,7 +4433,9 @@ var VoEdit = { render: function render() {
     chartClass: { type: String, default: '' },
     draggable: { type: Boolean, default: false },
     dropCriteria: { type: Function },
-    toggleCollapse: { type: Boolean, default: true }
+    toggleCollapse: { type: Boolean, default: true },
+    avatarUrl: { type: String },
+    defaultAvatarUrl: { type: String, default: '' }
   },
   data: function data() {
     return {

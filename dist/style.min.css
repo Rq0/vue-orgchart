@@ -236,27 +236,9 @@
   white-space: inherit;
   line-height: 20px;
   overflow: hidden;
-  width: auto;
-  overflow: hidden;
   background-color: #42b983;
   color: #fff;
-  /*flex-direction: column;*/
   display: flex;
-  line-height: 20px;
-
-{
-/*text-align: center;*/
-/*font-size: 12px;*/
-/*font-weight: 300;*/
-/*height: 20px;*/
-/*line-height: 20px;*/
-/*overflow: hidden;*/
-/*text-overflow: ellipsis;*/
-/*white-space: nowrap;*/
-/*background-color: #42b983;*/
-/*color: #fff;*/
-/*border-radius: 4px 4px 0 0*/
-}
 }
 
 .orgchart .node .title .title-image {
