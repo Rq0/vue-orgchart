@@ -6,7 +6,9 @@ export default class OrgChart {
 
       return this.then(
         value => P.resolve(callback()).then(() => value),
-        reason => P.resolve(callback()).then(() => { throw reason; })
+        reason => P.resolve(callback()).then(() => {
+          throw reason;
+        })
       );
     };
 
@@ -24,12 +26,14 @@ export default class OrgChart {
         'direction': 't2b',
         'pan': false,
         'zoom': false,
-        'toggleCollapse': true
+        'toggleCollapse': true,
       },
+
       opts = Object.assign(defaultOptions, options),
       data = opts.data,
       chart = document.createElement('div'),
       chartContainer = document.querySelector(opts.chartContainer);
+
 
     this.options = opts;
     delete this.options.data;
@@ -48,17 +52,17 @@ export default class OrgChart {
       spinner.setAttribute('class', 'fa fa-circle-o-notch fa-spin spinner');
       chart.appendChild(spinner);
       this._getJSON(data)
-      .then(function (resp) {
-        that.buildHierarchy(chart, opts.ajaxURL ? resp : that._attachRel(resp, '00'), 0);
-      })
-      .catch(function (err) {
-        console.error('failed to fetch datasource for orgchart', err);
-      })
-      .finally(function () {
-        let spinner = chart.querySelector('.spinner');
+        .then(function (resp) {
+          that.buildHierarchy(chart, opts.ajaxURL ? resp : that._attachRel(resp, '00'), 0);
+        })
+        .catch(function (err) {
+          console.error('failed to fetch datasource for orgchart', err);
+        })
+        .finally(function () {
+          let spinner = chart.querySelector('.spinner');
 
-        spinner.parentNode.removeChild(spinner);
-      });
+          spinner.parentNode.removeChild(spinner);
+        });
     }
     chart.addEventListener('click', this._clickChart.bind(this));
     // append the export button to the chart-container
@@ -92,12 +96,15 @@ export default class OrgChart {
 
     chartContainer.appendChild(chart);
   }
+
   get name() {
     return this._name;
   }
+
   _closest(el, fn) {
     return el && ((fn(el) && el !== this.chart) ? el : this._closest(el.parentNode, fn));
   }
+
   _siblings(el, expr) {
     return Array.from(el.parentNode.children).filter((child) => {
       if (child !== el) {
@@ -109,6 +116,7 @@ export default class OrgChart {
       return false;
     });
   }
+
   _prevAll(el, expr) {
     let sibs = [],
       prevSib = el.previousElementSibling;
@@ -121,6 +129,7 @@ export default class OrgChart {
     }
     return sibs;
   }
+
   _nextAll(el, expr) {
     let sibs = [];
     let nextSib = el.nextElementSibling;
@@ -133,9 +142,11 @@ export default class OrgChart {
     }
     return sibs;
   }
+
   _isVisible(el) {
     return el.offsetParent !== null;
   }
+
   _addClass(elements, classNames) {
     elements.forEach((el) => {
       if (classNames.indexOf(' ') > 0) {
@@ -145,6 +156,7 @@ export default class OrgChart {
       }
     });
   }
+
   _removeClass(elements, classNames) {
     elements.forEach((el) => {
       if (classNames.indexOf(' ') > 0) {
@@ -154,16 +166,19 @@ export default class OrgChart {
       }
     });
   }
+
   _css(elements, prop, val) {
     elements.forEach((el) => {
       el.style[prop] = val;
     });
   }
+
   _removeAttr(elements, attr) {
     elements.forEach((el) => {
       el.removeAttribute(attr);
     });
   }
+
   _one(el, type, listener, self) {
     let one = function (event) {
       try {
@@ -175,12 +190,14 @@ export default class OrgChart {
 
     el.addEventListener(type, one);
   }
+
   _getDescElements(ancestors, selector) {
     let results = [];
 
     ancestors.forEach((el) => results.push(...el.querySelectorAll(selector)));
     return results;
   }
+
   _getJSON(url) {
     return new Promise(function (resolve, reject) {
       let xhr = new XMLHttpRequest();
@@ -195,6 +212,7 @@ export default class OrgChart {
           reject(new Error(this.statusText));
         }
       }
+
       xhr.open('GET', url);
       xhr.onreadystatechange = handler;
       xhr.responseType = 'json';
@@ -203,11 +221,12 @@ export default class OrgChart {
       xhr.send();
     });
   }
+
   _buildJsonDS(li) {
     let subObj = {
       'name': li.firstChild.textContent.trim(),
       'relationship': (li.parentNode.parentNode.nodeName === 'LI' ? '1' : '0') +
-        (li.parentNode.children.length > 1 ? 1 : 0) + (li.children.length ? 1 : 0)
+      (li.parentNode.children.length > 1 ? 1 : 0) + (li.children.length ? 1 : 0)
     };
 
     if (li.id) {
@@ -215,12 +234,15 @@ export default class OrgChart {
     }
     if (li.querySelector('ul')) {
       Array.from(li.querySelector('ul').children).forEach((el) => {
-        if (!subObj.children) { subObj.children = []; }
+        if (!subObj.children) {
+          subObj.children = [];
+        }
         subObj.children.push(this._buildJsonDS(el));
       });
     }
     return subObj;
   }
+
   _attachRel(data, flags) {
     data.relationship = flags + (data.children && data.children.length > 0 ? 1 : 0);
     if (data.children) {
@@ -230,19 +252,22 @@ export default class OrgChart {
     }
     return data;
   }
+
   _repaint(node) {
     if (node) {
       node.style.offsetWidth = node.offsetWidth;
     }
   }
+
   // whether the cursor is hovering over the node
   _isInAction(node) {
     return node.querySelector(':scope > .edge').className.indexOf('fa-') > -1;
   }
+
   // detect the exist/display state of related node
   _getNodeState(node, relation) {
     let criteria,
-      state = { 'exist': false, 'visible': false };
+      state = {'exist': false, 'visible': false};
 
     if (relation === 'parent') {
       criteria = this._closest(node, (el) => el.classList && el.classList.contains('nodes'));
@@ -272,6 +297,7 @@ export default class OrgChart {
 
     return state;
   }
+
   // find the related nodes
   getRelatedNodes(node, relation) {
     if (relation === 'parent') {
@@ -286,6 +312,7 @@ export default class OrgChart {
     }
     return [];
   }
+
   _switchHorizontalArrow(node) {
     let opts = this.options,
       leftEdge = node.querySelector('.leftEdge'),
@@ -293,7 +320,7 @@ export default class OrgChart {
       temp = this._closest(node, (el) => el.nodeName === 'TABLE').parentNode;
 
     if (opts.toggleSiblingsResp && (typeof opts.ajaxURL === 'undefined' ||
-      this._closest(node, (el) => el.classList.contains('.nodes')).dataset.siblingsLoaded)) {
+        this._closest(node, (el) => el.classList.contains('.nodes')).dataset.siblingsLoaded)) {
       let prevSib = temp.previousElementSibling,
         nextSib = temp.nextElementSibling;
 
@@ -325,6 +352,7 @@ export default class OrgChart {
       rightEdge.classList.toggle('fa-chevron-right', !sibsVisible);
     }
   }
+
   _hoverNode(event) {
     let node = event.target,
       flag = false,
@@ -352,6 +380,7 @@ export default class OrgChart {
       });
     }
   }
+
   // define node click event handler
   _clickNode(event) {
     let clickedNode = event.currentTarget,
@@ -362,6 +391,7 @@ export default class OrgChart {
     }
     clickedNode.classList.add('focused');
   }
+
   // build the parent node of specific node
   _buildParentNode(currentRoot, nodeData, callback) {
     let that = this,
@@ -400,10 +430,12 @@ export default class OrgChart {
         console.error('Failed to create parent node', err);
       });
   }
+
   _switchVerticalArrow(arrow) {
     arrow.classList.toggle('fa-chevron-up');
     arrow.classList.toggle('fa-chevron-down');
   }
+
   // show the parent node of the specified node
   showParent(node) {
     // just show only one superior level
@@ -425,6 +457,7 @@ export default class OrgChart {
     parent.classList.add('slide');
     parent.classList.remove('slide-down');
   }
+
   // show the sibling nodes of the specified node
   showSiblings(node, direction) {
     // firstly, show the sibling td tags
@@ -478,6 +511,7 @@ export default class OrgChart {
       }
     }, this);
   }
+
   // hide the sibling nodes of the specified node
   hideSiblings(node, direction) {
     let nodeContainer = this._closest(node, (el) => el.nodeName === 'TABLE').parentNode,
@@ -575,6 +609,7 @@ export default class OrgChart {
       }
     }, this);
   }
+
   // recursively hide the ancestor node and sibling nodes of the specified node
   hideParent(node) {
     let temp = Array.from(this._closest(node, function (el) {
@@ -609,6 +644,7 @@ export default class OrgChart {
       this.hideParent(parent);
     }
   }
+
   // exposed method
   addParent(currentRoot, data) {
     let that = this;
@@ -623,6 +659,7 @@ export default class OrgChart {
       that.showParent(currentRoot);
     });
   }
+
   // start up loading status for requesting new nodes
   _startLoading(arrow, node) {
     let opts = this.options,
@@ -648,6 +685,7 @@ export default class OrgChart {
     }
     return true;
   }
+
   // terminate loading status for requesting new nodes
   _endLoading(arrow, node) {
     let opts = this.options;
@@ -663,6 +701,7 @@ export default class OrgChart {
       exportBtn.disabled = false;
     }
   }
+
   // define click event handler for the top edge
   _clickTopEdge(event) {
     event.stopPropagation();
@@ -678,7 +717,9 @@ export default class OrgChart {
       });
       let parent = temp.parentNode.firstChild.querySelector('.node');
 
-      if (parent.classList.contains('slide')) { return; }
+      if (parent.classList.contains('slide')) {
+        return;
+      }
       // hide the ancestor nodes and sibling nodes of the specified node
       if (parentState.visible) {
         this.hideParent(node);
@@ -700,22 +741,23 @@ export default class OrgChart {
         // load new nodes
         this._getJSON(typeof opts.ajaxURL.parent === 'function' ?
           opts.ajaxURL.parent(node.dataset.source) : opts.ajaxURL.parent + nodeId)
-        .then(function (resp) {
-          if (that.chart.dataset.inAjax === 'true') {
-            if (Object.keys(resp).length) {
-              that.addParent(node, resp);
+          .then(function (resp) {
+            if (that.chart.dataset.inAjax === 'true') {
+              if (Object.keys(resp).length) {
+                that.addParent(node, resp);
+              }
             }
-          }
-        })
-        .catch(function (err) {
-          console.error('Failed to get parent node data.', err);
-        })
-        .finally(function () {
-          that._endLoading(topEdge, node);
-        });
+          })
+          .catch(function (err) {
+            console.error('Failed to get parent node data.', err);
+          })
+          .finally(function () {
+            that._endLoading(topEdge, node);
+          });
       }
     }
   }
+
   // recursively hide the descendant nodes of the specified node
   hideChildren(node) {
     let that = this,
@@ -755,6 +797,7 @@ export default class OrgChart {
     }, this);
     this._addClass(descendants, 'slide slide-up');
   }
+
   // show the children nodes of the specified node
   showChildren(node) {
     let that = this,
@@ -787,13 +830,15 @@ export default class OrgChart {
     this._addClass(descendants, 'slide');
     this._removeClass(descendants, 'slide-up');
   }
+
   // build the child nodes of specific node
   _buildChildNode(appendTo, nodeData, callback) {
     let data = nodeData.children || nodeData.siblings;
 
     appendTo.querySelector('td').setAttribute('colSpan', data.length * 2);
-    this.buildHierarchy(appendTo, { 'children': data }, 0, callback);
+    this.buildHierarchy(appendTo, {'children': data}, 0, callback);
   }
+
   // exposed method
   addChildren(node, data) {
     let that = this,
@@ -820,6 +865,7 @@ export default class OrgChart {
       }
     });
   }
+
   // bind click event handler for the bottom edge
   _clickBottomEdge(event) {
     event.stopPropagation();
@@ -835,8 +881,10 @@ export default class OrgChart {
       }).parentNode.lastChild;
 
       if (Array.from(temp.querySelectorAll('.node')).some((node) => {
-        return this._isVisible(node) && node.classList.contains('slide');
-      })) { return; }
+          return this._isVisible(node) && node.classList.contains('slide');
+        })) {
+        return;
+      }
       // hide the descendant nodes of the specified node
       if (childrenState.visible) {
         this.hideChildren(node);
@@ -849,22 +897,23 @@ export default class OrgChart {
       if (this._startLoading(bottomEdge, node)) {
         this._getJSON(typeof opts.ajaxURL.children === 'function' ?
           opts.ajaxURL.children(node.dataset.source) : opts.ajaxURL.children + nodeId)
-        .then(function (resp) {
-          if (that.chart.dataset.inAjax === 'true') {
-            if (resp.children.length) {
-              that.addChildren(node, resp);
+          .then(function (resp) {
+            if (that.chart.dataset.inAjax === 'true') {
+              if (resp.children.length) {
+                that.addChildren(node, resp);
+              }
             }
-          }
-        })
-        .catch(function (err) {
-          console.error('Failed to get children nodes data', err);
-        })
-        .finally(function () {
-          that._endLoading(bottomEdge, node);
-        });
+          })
+          .catch(function (err) {
+            console.error('Failed to get children nodes data', err);
+          })
+          .finally(function () {
+            that._endLoading(bottomEdge, node);
+          });
       }
     }
   }
+
   // subsequent processing of build sibling nodes
   _complementLine(oneSibling, siblingCount, existingSibligCount) {
     let temp = oneSibling.parentNode.parentNode.children;
@@ -883,6 +932,7 @@ export default class OrgChart {
       temp[2].insertBefore(leftLine, temp[2].children[1]);
     }
   }
+
   // build the sibling nodes of specific node
   _buildSiblingNode(nodeChart, nodeData, callback) {
     let that = this,
@@ -938,7 +988,7 @@ export default class OrgChart {
       that.buildHierarchy.call(that, that.chart, nodeData, 0, () => {
         if (++nodeCount === siblingCount) {
           let temp = nodeChart.nextElementSibling.children[3]
-            .children[insertPostion],
+              .children[insertPostion],
             td = document.createElement('td');
 
           td.setAttribute('colspan', 2);
@@ -962,6 +1012,7 @@ export default class OrgChart {
       });
     }
   }
+
   addSiblings(node, data) {
     let that = this;
 
@@ -982,6 +1033,7 @@ export default class OrgChart {
       that.chart.dataset.inEdit = '';
     });
   }
+
   removeNodes(node) {
     let parent = this._closest(node, el => el.nodeName === 'TABLE').parentNode,
       sibs = this._siblings(parent.parentNode);
@@ -1002,6 +1054,7 @@ export default class OrgChart {
       Array.from(parent.parentNode.children).forEach(el => el.remove());
     }
   }
+
   // bind click event handler for the left and right edges
   _clickHorizontalEdge(event) {
     event.stopPropagation();
@@ -1018,10 +1071,12 @@ export default class OrgChart {
         siblings = this._siblings(temp);
 
       if (siblings.some((el) => {
-        let node = el.querySelector('.node');
+          let node = el.querySelector('.node');
 
-        return this._isVisible(node) && node.classList.contains('slide');
-      })) { return; }
+          return this._isVisible(node) && node.classList.contains('slide');
+        })) {
+        return;
+      }
       if (opts.toggleSiblingsResp) {
         let prevSib = this._closest(node, (el) => el.nodeName === 'TABLE').parentNode.previousElementSibling,
           nextSib = this._closest(node, (el) => el.nodeName === 'TABLE').parentNode.nextElementSibling;
@@ -1057,22 +1112,23 @@ export default class OrgChart {
 
       if (this._startLoading(hEdge, node)) {
         this._getJSON(url)
-        .then(function (resp) {
-          if (that.chart.dataset.inAjax === 'true') {
-            if (resp.siblings || resp.children) {
-              that.addSiblings(node, resp);
+          .then(function (resp) {
+            if (that.chart.dataset.inAjax === 'true') {
+              if (resp.siblings || resp.children) {
+                that.addSiblings(node, resp);
+              }
             }
-          }
-        })
-        .catch(function (err) {
-          console.error('Failed to get sibling nodes data', err);
-        })
-        .finally(function () {
-          that._endLoading(hEdge, node);
-        });
+          })
+          .catch(function (err) {
+            console.error('Failed to get sibling nodes data', err);
+          })
+          .finally(function () {
+            that._endLoading(hEdge, node);
+          });
       }
     }
   }
+
   // event handler for toggle buttons in Hybrid(horizontal + vertical) OrgChart
   _clickToggleButton(event) {
     let that = this,
@@ -1081,7 +1137,9 @@ export default class OrgChart {
       descendants = Array.from(descWrapper.querySelectorAll('.node')),
       children = Array.from(descWrapper.children).map(item => item.querySelector('.node'));
 
-    if (children.some((item) => item.classList.contains('slide'))) { return; }
+    if (children.some((item) => item.classList.contains('slide'))) {
+      return;
+    }
     toggleBtn.classList.toggle('fa-plus-square');
     toggleBtn.classList.toggle('fa-minus-square');
     if (descendants[0].classList.contains('slide-up')) {
@@ -1113,6 +1171,7 @@ export default class OrgChart {
       });
     }
   }
+
   _dispatchClickEvent(event) {
     let classList = event.target.classList;
 
@@ -1128,6 +1187,7 @@ export default class OrgChart {
       this._clickNode(event);
     }
   }
+
   _onDragStart(event) {
     let nodeDiv = event.target,
       opts = this.options,
@@ -1208,6 +1268,7 @@ export default class OrgChart {
       }
     });
   }
+
   _onDragOver(event) {
     event.preventDefault();
     let dropZone = event.currentTarget;
@@ -1216,11 +1277,13 @@ export default class OrgChart {
       event.dataTransfer.dropEffect = 'none';
     }
   }
+
   _onDragEnd(event) {
     Array.from(this.chart.querySelectorAll('.allowedDrop')).forEach(function (el) {
       el.classList.remove('allowedDrop');
     });
   }
+
   _onDrop(event) {
     let dropZone = event.currentTarget,
       chart = this.chart,
@@ -1324,14 +1387,17 @@ export default class OrgChart {
       dragZone.querySelector('.node').removeChild(dragZone.querySelector('.bottomEdge'));
       Array.from(dragZone.parentNode.parentNode.children).slice(1).forEach((tr) => tr.remove());
     }
-    let customE = new CustomEvent('nodedropped.orgchart', { 'detail': {
-      'draggedNode': dragged,
-      'dragZone': dragZone.children[0],
-      'dropZone': dropZone
-    }});
+    let customE = new CustomEvent('nodedropped.orgchart', {
+      'detail': {
+        'draggedNode': dragged,
+        'dragZone': dragZone.children[0],
+        'dropZone': dropZone
+      }
+    });
 
     chart.dispatchEvent(customE);
   }
+
   // create node
   _createNode(nodeData, level) {
     let that = this,
@@ -1368,8 +1434,14 @@ export default class OrgChart {
         nodeDiv.setAttribute('data-parent', nodeData.parentId);
       }
       nodeDiv.innerHTML = `
-        <div class="title">${nodeData[opts.nodeTitle]}</div>
-        ${opts.nodeContent ? `<div class="content">${nodeData[opts.nodeContent]}</div>` : ''}
+        <div class="title">
+          ${opts.avatarUrl ? `<img 
+            class="title-image" 
+            src=${nodeData[opts.avatarUrl] || opts.defaultAvatarUrl} 
+            alt="">` : ''}
+          <div class="title-text">${nodeData[opts.nodeTitle]}</div>
+        </div>
+        ${opts.nodeContent ? `<div class="content">${nodeData[opts.nodeContent] || 'Должность не указана'}</div>` : '' }
       `;
       // append 4 direction arrows or expand/collapse buttons
       let flags = nodeData.relationship || '';
@@ -1428,6 +1500,7 @@ export default class OrgChart {
       resolve(nodeDiv);
     });
   }
+
   buildHierarchy(appendTo, nodeData, level, callback) {
     // Construct the node
     let that = this,
@@ -1442,26 +1515,26 @@ export default class OrgChart {
         appendTo.appendChild(nodeWrapper);
       }
       this._createNode(nodeData, level)
-      .then(function (nodeDiv) {
-        if (isVerticalNode) {
-          nodeWrapper.insertBefore(nodeDiv, nodeWrapper.firstChild);
-        } else {
-          let tr = document.createElement('tr');
+        .then(function (nodeDiv) {
+          if (isVerticalNode) {
+            nodeWrapper.insertBefore(nodeDiv, nodeWrapper.firstChild);
+          } else {
+            let tr = document.createElement('tr');
 
-          tr.innerHTML = `
+            tr.innerHTML = `
             <td ${childNodes ? `colspan="${childNodes.length * 2}"` : ''}>
             </td>
           `;
-          tr.children[0].appendChild(nodeDiv);
-          nodeWrapper.insertBefore(tr, nodeWrapper.children[0] ? nodeWrapper.children[0] : null);
-        }
-        if (callback) {
-          callback();
-        }
-      })
-      .catch(function (err) {
-        console.error('Failed to creat node', err);
-      });
+            tr.children[0].appendChild(nodeDiv);
+            nodeWrapper.insertBefore(tr, nodeWrapper.children[0] ? nodeWrapper.children[0] : null);
+          }
+          if (callback) {
+            callback();
+          }
+        })
+        .catch(function (err) {
+          console.error('Failed to creat node', err);
+        });
     }
     // Construct the inferior nodes and connectiong lines
     if (childNodes && childNodes.length !== 0) {
@@ -1540,6 +1613,7 @@ export default class OrgChart {
       });
     }
   }
+
   _clickChart(event) {
     let closestNode = this._closest(event.target, function (el) {
       return el.classList && el.classList.contains('node');
@@ -1549,6 +1623,7 @@ export default class OrgChart {
       this.chart.querySelector('.node.focused').classList.remove('focused');
     }
   }
+
   _clickExportButton() {
     let opts = this.options,
       chartContainer = this.chartContainer,
@@ -1575,53 +1650,62 @@ export default class OrgChart {
         canvasContainer.querySelector('.orgchart:not(.hidden)').transform = '';
       }
     })
-    .then((canvas) => {
-      let downloadBtn = chartContainer.querySelector('.oc-download-btn');
+      .then((canvas) => {
+        let downloadBtn = chartContainer.querySelector('.oc-download-btn');
 
-      chartContainer.querySelector('.mask').classList.add('hidden');
-      downloadBtn.setAttribute('href', canvas.toDataURL());
-      downloadBtn.click();
-    })
-    .catch((err) => {
-      console.error('Failed to export the curent orgchart!', err);
-    })
-    .finally(() => {
-      chartContainer.classList.remove('canvasContainer');
-    });
+        chartContainer.querySelector('.mask').classList.add('hidden');
+        downloadBtn.setAttribute('href', canvas.toDataURL());
+        downloadBtn.click();
+      })
+      .catch((err) => {
+        console.error('Failed to export the curent orgchart!', err);
+      })
+      .finally(() => {
+        chartContainer.classList.remove('canvasContainer');
+      });
   }
+
   _loopChart(chart) {
-    let subObj = { 'id': chart.querySelector('.node').id };
+    let subObj = {'id': chart.querySelector('.node').id};
 
     if (chart.children[3]) {
       Array.from(chart.children[3].children).forEach((el) => {
-        if (!subObj.children) { subObj.children = []; }
+        if (!subObj.children) {
+          subObj.children = [];
+        }
         subObj.children.push(this._loopChart(el.firstChild));
       });
     }
     return subObj;
   }
+
   _loopChartDataset(chart) {
     let _subObj = JSON.parse(chart.querySelector('.node').dataset.source);
     if (chart.children[3]) {
       Array.from(chart.children[3].children).forEach((el) => {
-        if (!_subObj.children) { _subObj.children = []; }
+        if (!_subObj.children) {
+          _subObj.children = [];
+        }
         _subObj.children.push(this._loopChartDataset(el.firstChild));
       });
     }
     return _subObj;
   }
+
   getChartJSON() {
     if (!this.chart.querySelector('.node').id) {
       return 'Error: Nodes of orghcart to be exported must have id attribute!';
     }
     return this._loopChartDataset(this.chart.querySelector('table'));
   }
+
   getHierarchy() {
     if (!this.chart.querySelector('.node').id) {
       return 'Error: Nodes of orghcart to be exported must have id attribute!';
     }
     return this._loopChart(this.chart.querySelector('table'));
   }
+
   _onPanStart(event) {
     let chart = event.currentTarget;
 
@@ -1660,10 +1744,11 @@ export default class OrgChart {
     } else if (event.targetTouches.length > 1) {
       return;
     }
-    chart.dataset.panStart = JSON.stringify({ 'startX': startX, 'startY': startY });
+    chart.dataset.panStart = JSON.stringify({'startX': startX, 'startY': startY});
     chart.addEventListener('mousemove', this._onPanning.bind(this));
     chart.addEventListener('touchmove', this._onPanning.bind(this));
   }
+
   _onPanning(event) {
     let chart = event.currentTarget;
 
@@ -1706,6 +1791,7 @@ export default class OrgChart {
       chart.style.transform = matrix.join(',');
     }
   }
+
   _onPanEnd(event) {
     let chart = this.chart;
 
@@ -1716,6 +1802,7 @@ export default class OrgChart {
       document.body.removeEventListener('touchmove', this._onPanning);
     }
   }
+
   _setChartScale(chart, newScale) {
     let lastTf = window.getComputedStyle(chart).transform;
 
@@ -1734,6 +1821,7 @@ export default class OrgChart {
     }
     chart.dataset.scale = newScale;
   }
+
   _onWheeling(event) {
     event.preventDefault();
 
@@ -1741,12 +1829,14 @@ export default class OrgChart {
 
     this._setChartScale(this.chart, newScale);
   }
+
   _getPinchDist(event) {
     return Math.sqrt((event.touches[0].clientX - event.touches[1].clientX) *
       (event.touches[0].clientX - event.touches[1].clientX) +
       (event.touches[0].clientY - event.touches[1].clientY) *
       (event.touches[0].clientY - event.touches[1].clientY));
   }
+
   _onTouchStart(event) {
     let chart = this.chart;
 
@@ -1757,6 +1847,7 @@ export default class OrgChart {
       chart.dataset.pinchDistStart = dist;
     }
   }
+
   _onTouchMove(event) {
     let chart = this.chart;
 
@@ -1766,6 +1857,7 @@ export default class OrgChart {
       chart.dataset.pinchDistEnd = dist;
     }
   }
+
   _onTouchEnd(event) {
     let chart = this.chart;
 

@@ -1,0 +1,149 @@
+{
+  "name": "zzzs",
+  "children": [
+    {
+      "name": "ПЖ",
+      "position": "Главный",
+      "children": [
+        {
+          "name": "Петров Владимир Ярославович",
+          "position": "Ответственный"
+        },
+        {
+          "name": "Потехина Ирина Андреевна",
+          "avatar": "https://imgur.com/I80W1Q0.png",
+          "position": "Уборщик",
+          "children": [
+            {
+              "name": "Советов Алексей Александрович",
+              "avatar": "https://imgur.com/I80W1Q0.png",
+              "position": "Руководитель",
+              "className": "waiting-chart",
+              "children": [
+                {
+                  "name": "adsfasdfasdf asdfasdfasdf asdfasdfasdf"
+                }
+              ]
+            },
+            {
+              "name": "Гурова Полина Евгеньевна",
+              "avatar": "https://imgur.com/I80W1Q0.png",
+              "position": "Уборщик",
+              "className": "success-chart"
+            },
+            {
+              "name": "Рачипа Ярослав Анатольевич",
+              "avatar": "https://imgur.com/I80W1Q0.png",
+              "position": "Ответственный за работу с обращениями граждан, организацию и проведение личного приема граждан и прямой линии",
+              "className": "canceled-chart",
+              "children": [
+                {
+                  "name": "adsfasdfasdf asdfasdfasdf asdfasdfasdfs"
+                }
+              ]
+            },
+            {
+              "name": "Советов Алексей Александрович",
+              "avatar": "https://imgur.com/I80W1Q0.png",
+              "position": "Руководитель",
+              "className": "waiting-chart",
+              "children": [
+                {
+                  "name": "adsfasdfasdf asdfasdfasdf asdfasdfasdf"
+                }
+              ]
+            },
+            {
+              "name": "Гурова Полина Евгеньевна",
+              "avatar": "https://s3-ap-southeast-2.amazonaws.com/production-oms/data/30325/pool_and_spa_master/avatar_3.jpg",
+              "position": "Уборщик",
+              "className": "success-chart"
+            },
+            {
+              "name": "Рачипа Ярослав Анатольевич",
+              "avatar": "https://s3-ap-southeast-2.amazonaws.com/production-oms/data/30325/pool_and_spa_master/avatar_3.jpg",
+              "position": "Ответственный за работу с обращениями граждан, организацию и проведение личного приема граждан и прямой линии",
+              "className": "canceled-chart",
+              "children": [
+                {
+                  "name": "adsfasdfasdf asdfasdfasdf asdfasdfasdfs"
+                }
+              ]
+            },
+            {
+              "name": "Советов Алексей Александрович",
+              "avatar": "https://s3-ap-southeast-2.amazonaws.com/production-oms/data/30325/pool_and_spa_master/avatar_3.jpg",
+              "position": "Руководитель",
+              "className": "waiting-chart",
+              "children": [
+                {
+                  "name": "adsfasdfasdf asdfasdfasdf asdfasdfasdf"
+                }
+              ]
+            },
+            {
+              "name": "Гурова Полина Евгеньевна",
+              "avatar": "https://s3-ap-southeast-2.amazonaws.com/production-oms/data/30325/pool_and_spa_master/avatar_3.jpg",
+              "position": "Уборщик",
+              "className": "success-chart"
+            },
+            {
+              "name": "Рачипа Ярослав Анатольевич",
+              "avatar": "https://s3-ap-southeast-2.amazonaws.com/production-oms/data/30325/pool_and_spa_master/avatar_3.jpg",
+              "position": "Ответственный за работу с обращениями граждан, организацию и проведение личного приема граждан и прямой линии",
+              "className": "canceled-chart",
+              "children": [
+                {
+                  "name": "adsfasdfasdf asdfasdfasdf asdfasdfasdfs"
+                }
+              ]
+            },
+            {
+              "name": "Советов Алексей Александрович",
+              "avatar": "https://s3-ap-southeast-2.amazonaws.com/production-oms/data/30325/pool_and_spa_master/avatar_3.jpg",
+              "position": "Руководитель",
+              "className": "waiting-chart",
+              "children": [
+                {
+                  "name": "adsfasdfasdf asdfasdfasdf asdfasdfasdf"
+                }
+              ]
+            },
+            {
+              "name": "Гурова Полина Евгеньевна",
+              "avatar": "https://s3-ap-southeast-2.amazonaws.com/production-oms/data/30325/pool_and_spa_master/avatar_3.jpg",
+              "position": "Уборщик",
+              "className": "success-chart"
+            },
+            {
+              "name": "Рачипа Ярослав Анатольевич",
+              "avatar": "https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295429_960_720.png",
+              "position": "Ответственный за работу с обращениями граждан, организацию и проведение личного приема граждан и прямой линии",
+              "className": "canceled-chart",
+              "children": [
+                {
+                  "name": "1"
+                }
+              ]
+            },
+            {
+              "name": "adsfasdfasdf asdfasdfasdf asdfasdfasdfs"
+            }
+          ]
+        },
+        {
+          "name": "Сазонов Никита Евгеньевич",
+          "avatar": "https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295429_960_720.png",
+          "position": "Руководитель",
+          "children": [
+            {
+              "name": "Иванова Мария Сергеевна",
+              "position": "Синьер",
+              "className": "unnecessary-chart"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
