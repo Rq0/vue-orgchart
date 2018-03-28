@@ -4467,6 +4467,7 @@ var VoEdit = { render: function render() {
     data: function data(newVal) {
       var _this = this;
 
+      this.$vnode.elm.childNodes[0].remove();
       this.newData = newVal;
       var promise = new Promise(function (resolve) {
         if (newVal) {

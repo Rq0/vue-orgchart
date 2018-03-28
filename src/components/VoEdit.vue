@@ -59,6 +59,7 @@
     },
     watch: {
       data (newVal) {
+        this.$vnode.elm.childNodes[0].remove()
         this.newData = newVal
         const promise = new Promise((resolve) => {
           if (newVal) {
